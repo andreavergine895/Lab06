@@ -27,5 +27,37 @@ class Controller:
         self._view.txt_responsabile.value = f"Responsabile: {self._model.responsabile}"
         self._view.update()
 
-    # Altre Funzioni Event Handler
-    # TODO
+    # --- EVENTO: MOSTRA TUTTE LE AUTO ---
+    def mostra_automobili(self, e):
+        """Mostra l'elenco completo delle automobili nel database."""
+        self._view.lista_auto.controls.clear()
+        automobili = self._model.get_automobili()
+
+        if not automobili:
+            self._view.show_alert("Nessuna automobile trovata nel database.")
+            return
+
+        for auto in automobili:
+            self._view.lista_auto.controls.append(ft.Text(str(auto)))
+
+        self._view.update()
+
+    # --- EVENTO: CERCA AUTO PER MODELLO ---
+    def cerca_auto_modello(self, e):
+        """Cerca automobili per modello e aggiorna la lista di ricerca."""
+        modello = self._view.input_modello_auto.value.strip()
+        if not modello:
+            self._view.show_alert("Inserisci un modello da cercare.")
+            return
+
+        self._view.lista_auto_ricerca.controls.clear()
+        automobili = self._model.cerca_automobili_per_modello(modello)
+
+        if not automobili:
+            self._view.show_alert("Nessuna automobile trovata per il modello indicato.")
+            return
+
+        for auto in automobili:
+            self._view.lista_auto_ricerca.controls.append(ft.Text(str(auto)))
+
+        self._view.update()
